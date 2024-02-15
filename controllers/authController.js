@@ -1,3 +1,4 @@
+const util = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsyncError = require('./../utils/catchAsyncError');
@@ -62,4 +63,43 @@ exports.login = catchAsyncError(async (req, res, next) => {
     });
   }
   createAndSendToken(user, 200, res);
+});
+
+exports.protect = catchAsyncError(async (req, res, next) => {
+  //1) Getting token and check if its true
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  if (!token) {
+    return res.status(401).json({
+      status: 'fail',
+      message: 'please login to have access',
+    });
+  }
+  //2) Verification of the token
+  const payload = await util.promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET,
+  );
+  //3) Verify that the user already exists
+  const currentUser = await User.findById(payload.id);
+  if (!currentUser) {
+    return res.status(401).json({
+      status: 'fail',
+      message: 'The user which own this token is no longer exists',
+    });
+  }
+  //4) check if User change the password after the token has been issued
+  if (currentUser.changePasswordAfter(payload.iat)) {
+    return res.status(401).json({
+      status: 'fail',
+      message: 'The user has recently changed the password, please login again',
+    });
+  }
+  req.user = currentUser;
+  next();
 });

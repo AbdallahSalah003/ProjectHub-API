@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 userSchema = new mongoose.Schema({
   username: {
@@ -28,7 +28,7 @@ userSchema = new mongoose.Schema({
       values: ['user', 'admin'],
       message: 'role must be either user or admin',
     },
-    required: [true, 'Please provide a role field'],
+    default: 'user',
   },
   password: {
     type: String,
@@ -80,6 +80,14 @@ userSchema.methods.isCorrectPassword = async function (
   userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changePasswordAfter = function (JWT_TimeStamp) {
+  if (this.passwordChangetAt) {
+    const seconds = Date.parse(this.passwordChangetAt) / 1000;
+    return JWT_TimeStamp < seconds;
+  }
+  return false;
 };
 
 const User = mongoose.model('User', userSchema);
