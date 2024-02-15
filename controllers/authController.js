@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
-import User from '../models/userModel';
+const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
+const catchAsyncError = require('./../utils/catchAsyncError');
 
 const signToken = (_id) => {
   return jwt.sign({ id: _id }, process.env.JWT_SECRET, {

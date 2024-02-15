@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const validatior = require('validator');
+const validator = require('validator');
 // const bcrypt = require('bcrypt');
 
 userSchema = new mongoose.Schema({
@@ -14,7 +14,7 @@ userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A user must have an email'],
     lowercase: true,
-    validate: [validatior.isEmail, 'Invalid email address!'],
+    validate: [validator.isEmail, 'Invalid email address!'],
   },
   first_name: {
     type: String,
@@ -33,7 +33,7 @@ userSchema = new mongoose.Schema({
   password: {
     type: String,
     validate: [
-      validatior.isStrongPassword,
+      validator.isStrongPassword,
       'A password must be minLength: 8, ans must contian minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1',
     ],
     select: false,
@@ -56,6 +56,16 @@ userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+});
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  // we just need passwordConfirm for validation function
+  // then set it to undefined
+  this.passwordConfirm = undefined;
+  next();
 });
 
 const User = mongoose.model('User', userSchema);

@@ -1,7 +1,7 @@
 const User = require('./../models/userModel');
-const catchAsyncErrors = require('./../utils/catchAsyncError');
+const catchAsyncError = require('./../utils/catchAsyncError');
 
-exports.getAllUsers = catchAsyncErrors(async (req, res) => {
+exports.getAllUsers = catchAsyncError(async (req, res) => {
   const users = await User.find();
   if (!users) {
     res.status(404).json({
@@ -15,7 +15,7 @@ exports.getAllUsers = catchAsyncErrors(async (req, res) => {
     });
   }
 });
-exports.addUser = catchAsyncErrors(async (req, res) => {
+exports.addUser = catchAsyncError(async (req, res) => {
   const user = await User.create(req.body);
   if (!user) {
     res.status(404).json({
@@ -29,7 +29,7 @@ exports.addUser = catchAsyncErrors(async (req, res) => {
     });
   }
 });
-exports.getUser = catchAsyncErrors(async (req, res) => {
+exports.getUser = catchAsyncError(async (req, res) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     res.status(404).json({
@@ -43,7 +43,7 @@ exports.getUser = catchAsyncErrors(async (req, res) => {
     });
   }
 });
-exports.updateUser = catchAsyncErrors(async (req, res) => {
+exports.updateUser = catchAsyncError(async (req, res) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -61,7 +61,7 @@ exports.updateUser = catchAsyncErrors(async (req, res) => {
     });
   }
 });
-exports.deleteUser = catchAsyncErrors(async (req, res) => {
+exports.deleteUser = catchAsyncError(async (req, res) => {
   const user = await User.findByIdDelete(req.params.id);
   if (!user) {
     res.status(404).json({
