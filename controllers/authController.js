@@ -42,3 +42,24 @@ exports.signup = catchAsyncError(async (req, res) => {
 
   createAndSendToken(newUser, 201, res);
 });
+
+exports.login = catchAsyncError(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Please provide both email and password to login',
+    });
+  }
+
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user || !(await user.isCorrectPassword(password, user.password))) {
+    return res.status(401).json({
+      status: 'fail',
+      message: 'Invalid email or password',
+    });
+  }
+  createAndSendToken(user, 200, res);
+});
