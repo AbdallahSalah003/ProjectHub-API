@@ -47,6 +47,7 @@ projectSchema.pre('save', function (next) {
   //if the project is already started before adding to app
   if (this.startDate < Date.now()) this.status = 'started';
   else this.status = 'notStarted';
+  next();
 });
 const Project = mongoose.model('Project', projectSchema);
 
