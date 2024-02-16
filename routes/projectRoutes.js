@@ -4,6 +4,8 @@ const projectController = require('./../controllers/projectController');
 
 const router = express.Router();
 
+router.use(authController.protect);
+
 router
   .route('/')
   .get(projectController.getAllProjects)
