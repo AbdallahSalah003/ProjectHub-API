@@ -36,9 +36,18 @@ const projectSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum: {
+      values: ['notStarted', 'started', 'completed', 'cancelled'],
+      message: 'Invalid status value',
+    },
   },
 });
 
+projectSchema.pre('save', function (next) {
+  //if the project is already started before adding to app
+  if (this.startDate < Date.now()) this.status = 'started';
+  else this.status = 'notStarted';
+});
 const Project = mongoose.model('Project', projectSchema);
 
 module.exports = Project;
