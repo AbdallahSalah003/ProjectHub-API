@@ -27,7 +27,7 @@ exports.deleteProject = catchAsyncError(async (req, res) => {
   });
 });
 exports.updateProject = catchAsyncError(async (req, res) => {
-  const project = Project.findByIdAndUpdate(req.params.id);
+  const project = await Project.findByIdAndUpdate(req.params.id, req.body);
   res.status(200).json({
     status: 'success',
     data: {
