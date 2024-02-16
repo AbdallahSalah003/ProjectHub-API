@@ -2,8 +2,10 @@ const Project = require('./../models/projectModel');
 const catchAsyncError = require('./../utils/catchAsyncError');
 
 exports.createProject = catchAsyncError(async (req, res) => {
-  const proj = { ...req.body, ownerID: req.user.id };
-  const newProject = await Project.create(proj);
+  const newProject = await Project.create({
+    ...req.body,
+    ownerID: req.user.id,
+  });
   res.status(201).json({
     status: 'success',
     data: {

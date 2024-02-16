@@ -4,24 +4,21 @@ const User = require('./../models/userModel');
 const catchAsyncError = require('./../utils/catchAsyncError');
 
 exports.createTask = catchAsyncError(async (req, res) => {
-  const moderator = await User.find({ email: req.body.moderatorEmail });
-  const project = await Project.find({
-    name: req.body.projectName,
-    ownweID: req.user.id,
+  const moderator = await User.findOne({ email: req.body.moderatorEmail });
+  let contributers = [];
+  req.body.contributers.forEach((el) => {
+    contributers.push(User.findOne({ email: el }));
   });
-  const contributers = req.body.contributers.every(async (el) => {
-    el = await User.find({ email: el })._id;
-  });
+  contributers = (await Promise.all(contributers)).map((el) => el._id);
   const task = {
-    projectID: project._id,
+    projectID: req.params.projectID,
     moderatorID: moderator._id,
     name: req.body.name,
     contributers: contributers,
     description: req.body.description,
     startDate: req.body.startDate,
-    endDate: res.body.endDate,
+    endDate: req.body.endDate,
   };
-
   const newTask = await Task.create(task);
   res.status(201).json({
     status: 'success',
@@ -31,7 +28,7 @@ exports.createTask = catchAsyncError(async (req, res) => {
   });
 });
 exports.getAllTasks = catchAsyncError(async (req, res) => {
-  const tasks = await Task.find();
+  const tasks = await Task.find({ projectID: req.params.projectID });
   res.status(200).json({
     status: 'success',
     data: {

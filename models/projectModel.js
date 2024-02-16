@@ -5,7 +5,7 @@ const projectSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  ownweID: {
+  ownerID: {
     type: mongoose.Types.ObjectId,
     ref: 'User',
   },
