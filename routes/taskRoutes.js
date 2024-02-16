@@ -10,5 +10,8 @@ router
   .route('/')
   .get(taskController.getAllTasks)
   .post(taskController.createTask);
-
+router
+  .route('/:taskId')
+  .delete(taskController.deleteTask)
+  .patch(taskController.updateTask);
 module.exports = router;

@@ -37,14 +37,17 @@ exports.getAllTasks = catchAsyncError(async (req, res) => {
   });
 });
 exports.deleteTask = catchAsyncError(async (req, res) => {
-  await Task.findByIdAndDelete(req.params.id);
+  await Task.findByIdAndDelete(req.params.taskId);
   res.status(201).json({
     status: 'success',
     data: null,
   });
 });
 exports.updateTask = catchAsyncError(async (req, res) => {
-  const task = await Task.findByIdAndUpdate(req.params.id, req.body);
+  const task = await Task.findByIdAndUpdate(req.params.taskId, req.body, {
+    new: true,
+    runValidators: true,
+  });
   res.status(200).json({
     status: 'success',
     data: {
