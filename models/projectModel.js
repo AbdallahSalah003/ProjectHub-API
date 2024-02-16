@@ -4,7 +4,6 @@ const validator = require('validator');
 const projectSchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true,
   },
   ownweID: {
     type: mongoose.Types.ObjectId,
