@@ -9,8 +9,11 @@ module.exports = class APIFeatures {
     const excludeFileds = ['page', 'sort', 'limit', 'fields'];
     excludeFileds.forEach((el) => delete queryObj[el]);
 
-    this.query = this.query.find(queryObj);
+    // queryObj = { anyfield: { gte: '5' } } correct this to  { anyfield: { $gte: '5' }}
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
 
+    this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
 };
