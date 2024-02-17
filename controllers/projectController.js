@@ -1,40 +1,15 @@
 const Project = require('./../models/projectModel');
-const catchAsyncError = require('./../utils/catchAsyncError');
+// const catchAsyncError = require('./../utils/catchAsyncError');
+const factory = require('./handlerFactory');
 
-exports.createProject = catchAsyncError(async (req, res) => {
-  const newProject = await Project.create({
-    ...req.body,
-    ownerID: req.user.id,
-  });
-  res.status(201).json({
-    status: 'success',
-    data: {
-      newProject,
-    },
-  });
-});
-exports.getAllProjects = catchAsyncError(async (req, res) => {
-  const projects = await Project.find();
-  res.status(200).json({
-    status: 'success',
-    data: {
-      projects,
-    },
-  });
-});
-exports.deleteProject = catchAsyncError(async (req, res) => {
-  await Project.findByIdAndDelete(req.params.id);
-  res.status(201).json({
-    status: 'success',
-    data: null,
-  });
-});
-exports.updateProject = catchAsyncError(async (req, res) => {
-  const project = await Project.findByIdAndUpdate(req.params.id, req.body);
-  res.status(200).json({
-    status: 'success',
-    data: {
-      project,
-    },
-  });
-});
+exports.setOwnerId = (req, res, next) => {
+  req.body.ownerID = req.user.id;
+  next();
+};
+exports.createProject = factory.createOne(Project);
+
+exports.getAllProjects = factory.getAll(Project);
+
+exports.deleteProject = factory.deleteOne(Project);
+
+exports.updateProject = factory.updateOne(Project);

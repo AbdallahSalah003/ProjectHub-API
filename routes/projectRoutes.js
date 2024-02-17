@@ -12,7 +12,7 @@ router.use('/:projectID/tasks', taskRouter);
 router
   .route('/')
   .get(projectController.getAllProjects)
-  .post(projectController.createProject);
+  .post(projectController.setOwnerId, projectController.createProject);
 
 router
   .route('/:id')
