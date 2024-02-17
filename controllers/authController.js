@@ -1,4 +1,5 @@
 const util = require('util');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsyncError = require('./../utils/catchAsyncError');
@@ -152,4 +153,31 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
       ),
     );
   }
+});
+exports.resetPassword = catchAsyncError(async (req, res, next) => {
+  const encryptResetToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: encryptResetToken,
+    passwordResetExpiresToken: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(
+      new AppError(
+        'The token is wrong or may be expired. please try again later',
+        400,
+      ),
+    );
+  }
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetExpiresToken = undefined;
+  user.passwordResetToken = undefined;
+  await user.save();
+
+  createAndSendToken(user, 200, res);
 });
