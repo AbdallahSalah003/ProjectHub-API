@@ -51,3 +51,5 @@ exports.getAllTasks = factory.getAll(Task);
 exports.deleteTask = factory.deleteOne(Task);
 
 exports.updateTask = factory.updateOne(Task);
+
+exports.getOneTask = factory.getOne(Task);

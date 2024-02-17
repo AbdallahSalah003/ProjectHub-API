@@ -13,3 +13,5 @@ exports.getAllProjects = factory.getAll(Project);
 exports.deleteProject = factory.deleteOne(Project);
 
 exports.updateProject = factory.updateOne(Project);
+
+exports.getOneProject = factory.getOne(Project);

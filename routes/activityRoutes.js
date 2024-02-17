@@ -13,6 +13,7 @@ router
 
 router
   .route('/:id')
+  .get(activityController.getOneActivity)
   .patch(activityController.updateActivity)
   .delete(activityController.deleteActivity);
 

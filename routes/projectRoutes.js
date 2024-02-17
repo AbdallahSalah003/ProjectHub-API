@@ -16,6 +16,7 @@ router
 
 router
   .route('/:id')
+  .get(projectController.getOneProject)
   .delete(projectController.deleteProject)
   .patch(projectController.updateProject);
 

@@ -22,3 +22,5 @@ exports.getAllActivities = factory.getAll(Activity);
 exports.deleteActivity = factory.deleteOne(Activity);
 
 exports.updateActivity = factory.updateOne(Activity);
+
+exports.getOneActivity = factory.getOne(Activity);

@@ -43,17 +43,4 @@ exports.updateUser = factory.updateOne(User);
 
 exports.deleteUser = factory.deleteOne(User);
 
-exports.getUser = catchAsyncError(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (!user) {
-    res.status(404).json({
-      status: 'fail',
-      data: {},
-    });
-  } else {
-    res.status(200).json({
-      status: 'success',
-      data: { user },
-    });
-  }
-});
+exports.getUser = factory.getOne(User);
