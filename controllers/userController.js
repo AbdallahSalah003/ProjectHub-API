@@ -1,3 +1,4 @@
+const AppError = require('../utils/appError');
 const User = require('./../models/userModel');
 const catchAsyncError = require('./../utils/catchAsyncError');
 const factory = require('./handlerFactory');
@@ -10,6 +11,24 @@ exports.deleteMe = catchAsyncError(async (req, res, next) => {
   });
 });
 
+exports.updateMe = catchAsyncError(async (req, res, next) => {
+  const allowedFields = ['name', 'email'];
+  const filterBody = {};
+  Object.keys(req.body).forEach((key) => {
+    if (allowedFields.includes(key)) filterBody[key] = req.boy[key];
+  });
+  const user = await User.findByIdAndUpdate(req.user.id, filterBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: user,
+    },
+  });
+});
 exports.getAllUsers = factory.getAll(User);
 
 exports.updateUser = factory.updateOne(User);
