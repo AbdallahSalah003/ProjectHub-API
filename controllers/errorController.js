@@ -41,6 +41,11 @@ const handelValidationErrorDB = (error) => {
   return new AppError(message, 400);
 };
 
+const handelJsonWebTokenError = (err) =>
+  new AppError('Invalid token. Please log in again!', 401);
+const handelTokenExpiredError = (err) =>
+  new AppError('Expired token. Please log in again!', 401);
+
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -49,11 +54,17 @@ module.exports = (err, req, res, next) => {
     developmentErrorRespose(res, err);
   } else {
     let error = { ...err, name: err.name };
+
     if (error.name === 'CastError') e;
     rror = handelCastErrorsDB(error);
     if (error.code == 11000) error = handelDuplicateErrorsDB(error);
     if (error.name === 'ValidationError')
       error = handelValidationErrorDB(error);
+
+    if (error.name === 'JsonWebTokenError')
+      error = handelJsonWebTokenError(error);
+    if (error.name === 'TokenExpiredError')
+      error = handelTokenExpiredError(error);
 
     productionErrorResponse(res, error);
   }
