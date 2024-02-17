@@ -9,14 +9,15 @@ router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.use(authController.protect);
-// router.use(authController.restrictTo('admin'));
+
 router.patch('/updatePassword', authController.updatePassword);
 router.patch('/updateMe', usersController.updateMe);
 router.delete('/deleteMe', usersController.deleteMe);
 router.get('/getMe', usersController.getMe, usersController.getUser);
 
-router.route('/').get(usersController.getAllUsers);
+router.use(authController.restrictTo('admin'));
 
+router.route('/').get(usersController.getAllUsers);
 router
   .route('/:id')
   .get(usersController.getUser)
