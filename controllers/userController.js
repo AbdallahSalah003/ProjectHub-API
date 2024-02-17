@@ -12,6 +12,11 @@ exports.deleteMe = catchAsyncError(async (req, res, next) => {
 });
 
 exports.updateMe = catchAsyncError(async (req, res, next) => {
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError('You can update password through /updatePassword', 400),
+    );
+  }
   const allowedFields = ['name', 'email'];
   const filterBody = {};
   Object.keys(req.body).forEach((key) => {
