@@ -16,4 +16,14 @@ module.exports = class APIFeatures {
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
+
+  sort() {
+    if (this.queryStr.sort) {
+      const sortBy = this.queryStr.sort.split(',').join(' ');
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort('-_id');
+    }
+    return this;
+  }
 };
