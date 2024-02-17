@@ -142,6 +142,9 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
       message: 'Email has been sent',
     });
   } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpiresToken = undefined;
+    user.save({ validateBeforeSave: false });
     return next(
       new AppError(
         'There was an error sending email. please try again later',
