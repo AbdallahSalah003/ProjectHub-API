@@ -23,6 +23,7 @@ const activitySchema = new mongoose.Schema({
     enum: {
       values: ['progress', 'finished'],
     },
+    default: 'progress',
   },
 });
 

@@ -1,13 +1,10 @@
 const express = require('express');
-const activityRouter = require('./../routes/activityRoutes');
 const activityController = require('./../controllers/activityController');
 const authController = require('./../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
 
 router.use(authController.protect);
-
-router.use('/:taskId/activities', activityRouter);
 
 router
   .route('/')

@@ -4,6 +4,7 @@ const catchAsyncError = require('./../utils/catchAsyncError');
 
 exports.AddActivity = catchAsyncError(async (req, res) => {
   const contributer = await User.findOne({ email: req.body.contributer });
+  console.log(contributer);
   const newActivity = await Activity.create({
     ...req.body,
     taskID: req.params.taskId,
@@ -33,7 +34,10 @@ exports.deleteActivity = catchAsyncError(async (req, res) => {
   });
 });
 exports.updateActivity = catchAsyncError(async (req, res) => {
-  const activity = await Activity.findByIdAndUpdate(req.params.id, req.body);
+  const activity = await Activity.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
   res.status(200).json({
     status: 'success',
     data: {
