@@ -4,11 +4,11 @@ const taskSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  projectID: {
+  project: {
     type: mongoose.Types.ObjectId,
     ref: 'Project',
   },
-  moderatorID: {
+  moderator: {
     type: mongoose.Types.ObjectId,
     ref: 'User',
   },
@@ -46,7 +46,21 @@ taskSchema.pre('save', function (next) {
   if (this.startDate < Date.now()) this.status = 'started';
   next();
 });
-
+taskSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'project',
+    select: '_id name',
+  })
+    .populate({
+      path: 'moderator',
+      select: '_id name email',
+    })
+    .populate({
+      path: 'contributers',
+      select: '_id first_name email',
+    });
+  next();
+});
 const Task = mongoose.model('Task', taskSchema);
 
 module.exports = Task;

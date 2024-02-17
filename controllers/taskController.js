@@ -35,8 +35,8 @@ exports.setTask = catchAsyncError(async (req, res, next) => {
 
   const task = {
     ...req.body,
-    projectID: req.params.projectID,
-    moderatorID: moderator._id,
+    project: req.params.projectID,
+    moderator: moderator._id,
     contributers: contributers,
   };
 
