@@ -69,3 +69,18 @@ exports.createOne = (Model) =>
       },
     });
   });
+exports.getOne = (Model) =>
+  catchAsyncError(async (req, res, next) => {
+    let doc = await Model.findById(req.params.id);
+
+    if (!doc) {
+      return next(new AppError('This document ID is not found!', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        data: doc,
+      },
+    });
+  });
