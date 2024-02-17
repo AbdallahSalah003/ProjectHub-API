@@ -9,7 +9,7 @@ router.use(authController.protect);
 router
   .route('/')
   .get(activityController.getAllActivities)
-  .post(activityController.AddActivity);
+  .post(activityController.setActivity, activityController.AddActivity);
 
 router
   .route('/:id')
