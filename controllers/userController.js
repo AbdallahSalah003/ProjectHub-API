@@ -10,18 +10,21 @@ exports.deleteMe = catchAsyncError(async (req, res, next) => {
     data: null,
   });
 });
-
+const filterObj = (obj, ...allowedFields) => {
+  let newObj = {};
+  Object.keys(obj).forEach((key) => {
+    if (allowedFields.includes(key)) newObj[key] = obj[key];
+  });
+  return newObj;
+};
 exports.updateMe = catchAsyncError(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError('You can update password through /updatePassword', 400),
     );
   }
-  const allowedFields = ['name', 'email'];
-  const filterBody = {};
-  Object.keys(req.body).forEach((key) => {
-    if (allowedFields.includes(key)) filterBody[key] = req.boy[key];
-  });
+  const filterBody = filterObj(req.body, 'name', 'email');
+
   const user = await User.findByIdAndUpdate(req.user.id, filterBody, {
     new: true,
     runValidators: true,
