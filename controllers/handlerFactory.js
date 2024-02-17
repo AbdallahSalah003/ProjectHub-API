@@ -1,5 +1,5 @@
-const catchAsyncError = require('./../utilities/catchAsyncError');
-const AppError = require('./../utilities/appError');
+const catchAsyncError = require('./../utils/catchAsyncError');
+const AppError = require('./../utils/appError');
 
 exports.getAll = (Model) =>
   catchAsyncError(async (req, res, next) => {
