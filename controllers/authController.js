@@ -181,3 +181,26 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
   createAndSendToken(user, 200, res);
 });
+
+exports.updatePassword = catchAsyncError(async (req, res, next) => {
+  const LogedInUser = await User.findById(req.user.id).select('+password');
+
+  if (
+    !(await LogedInUser.isCorrectPassword(
+      req.body.currentPassword,
+      LogedInUser.password,
+    ))
+  ) {
+    return next(
+      new AppError(
+        'Your password is Invalid. you can reset your password if you forgot it!',
+        400,
+      ),
+    );
+  }
+  LogedInUser.password = req.body.password;
+  LogedInUser.passwordConfirm = req.body.passwordConfirm;
+  await LogedInUser.save();
+
+  createAndSendToken(LogedInUser, 200, res);
+});
