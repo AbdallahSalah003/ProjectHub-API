@@ -1,5 +1,6 @@
 const catchAsyncError = require('./../utils/catchAsyncError');
 const AppError = require('./../utils/appError');
+const APIFeatures = require('./../utils/apiFeaturs');
 
 exports.getAll = (Model) =>
   catchAsyncError(async (req, res, next) => {
@@ -9,7 +10,13 @@ exports.getAll = (Model) =>
     if (req.params.projectId)
       filterObj = { ...filterObj, projectID: req.params.projectId };
 
-    const docs = await Model.find(filterObj);
+    const features = new APIFeatures(Model.find(filterObj), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+
+    const docs = await features.query;
 
     res.status(200).json({
       status: 'success',
