@@ -53,3 +53,30 @@ exports.deleteTask = factory.deleteOne(Task);
 exports.updateTask = factory.updateOne(Task);
 
 exports.getOneTask = factory.getOne(Task);
+
+exports.getTaskStats = catchAsyncError(async (req, res, next) => {
+  console.log(req.params.projectID);
+  const stats = await Task.aggregate([
+    {
+      $match: {
+        project: req.params.projectID,
+      },
+    },
+    {
+      $group: {
+        _id: { $toUpper: '$status' },
+        numberOfActivities: { $sum: 1 },
+      },
+    },
+    {
+      $sort: { numberOfActivities: -1 },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      stats,
+    },
+  });
+});
