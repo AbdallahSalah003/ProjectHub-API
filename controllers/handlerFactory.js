@@ -12,6 +12,8 @@ exports.getAll = (Model) =>
 
     if (req.projs) filterObj = { ...filterObj, ownerID: req.user.id };
     if (req.myTasks) filterObj = { ...filterObj, moderator: req.user.id };
+    if (req.myActivities)
+      filterObj = { ...filterObj, contributer: req.user.id };
 
     const features = new APIFeatures(Model.find(filterObj), req.query)
       .filter()

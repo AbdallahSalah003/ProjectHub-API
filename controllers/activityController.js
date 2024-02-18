@@ -15,6 +15,10 @@ exports.setActivity = catchAsyncError(async (req, res, next) => {
   req.body.contributer = contributer._id;
   next();
 });
+exports.getMyActivities = (req, res, next) => {
+  req.myActivities = true;
+  next();
+};
 exports.AddActivity = factory.createOne(Activity);
 
 exports.getAllActivities = factory.getAll(Activity);

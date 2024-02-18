@@ -10,7 +10,11 @@ router
   .route('/')
   .get(activityController.getAllActivities)
   .post(activityController.setActivity, activityController.AddActivity);
-
+router.get(
+  '/get-my-activities',
+  activityController.getMyActivities,
+  activityController.getAllActivities,
+);
 router
   .route('/:id')
   .get(activityController.getOneActivity)
