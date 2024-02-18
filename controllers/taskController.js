@@ -44,6 +44,10 @@ exports.setTask = catchAsyncError(async (req, res, next) => {
   next();
 });
 
+exports.getMyTasks = (req, res, next) => {
+  req.myTasks = true;
+  next();
+};
 exports.createTask = factory.createOne(Task);
 
 exports.getAllTasks = factory.getAll(Task);

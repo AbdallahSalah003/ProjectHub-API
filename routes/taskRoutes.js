@@ -10,7 +10,11 @@ router.use('/:taskId/activities', activityRouter);
 router.use(authController.protect);
 
 router.get('/statistics', taskController.getTaskStats);
-
+router.get(
+  '/get-my-tasks',
+  taskController.getMyTasks,
+  taskController.getAllTasks,
+);
 router
   .route('/')
   .get(taskController.getAllTasks)
