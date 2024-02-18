@@ -18,3 +18,12 @@ const port = process.env.PORT;
 const server = app.listen(port, () => {
   console.log(`App running on part ${port}....`);
 });
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDELED REJECTION OCCURED SHUTING DOWN....');
+  console.log(err);
+  server.close(() => {
+    //first we gracefully close server.
+    process.exit(1);
+  });
+});
