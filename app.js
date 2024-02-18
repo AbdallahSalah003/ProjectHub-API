@@ -1,11 +1,14 @@
 const express = require('express');
 const morgan = require('morgan');
+const helmet = require('helmet');
 const userRouter = require('./routes/userRoutes');
 const projecRouter = require('./routes/projectRoutes');
 const taskRouter = require('./routes/taskRoutes');
 const activityRouter = require('./routes/activityRoutes');
 const GlobalErrorHandler = require('./controllers/errorController');
 const app = express();
+
+app.use(helmet());
 
 app.use(express.json({ limit: '10kb' }));
 
