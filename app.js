@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 const userRouter = require('./routes/userRoutes');
 const projecRouter = require('./routes/projectRoutes');
 const taskRouter = require('./routes/taskRoutes');
@@ -10,8 +11,6 @@ const GlobalErrorHandler = require('./controllers/errorController');
 const app = express();
 
 app.use(helmet());
-
-app.use(express.json({ limit: '10kb' }));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -23,6 +22,10 @@ const limitter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!',
 });
 app.use('./api', limitter);
+
+app.use(express.json({ limit: '10kb' }));
+
+app.use(mongoSanitize());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/projects', projecRouter);
