@@ -4,6 +4,10 @@ const validator = require('validator');
 const projectSchema = new mongoose.Schema({
   name: {
     type: String,
+    trim: true,
+    requierd: [true, 'Project must has a name'],
+    minLength: [8, 'Project name must be at least 8 charachters'],
+    maxLength: [40, 'Project name is at most 40 charachters'],
   },
   ownerID: {
     type: mongoose.Types.ObjectId,
@@ -20,6 +24,7 @@ const projectSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    trim: true,
   },
   startDate: {
     type: Date,

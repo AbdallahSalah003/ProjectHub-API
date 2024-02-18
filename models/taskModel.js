@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const taskSchema = new mongoose.Schema({
   name: {
     type: String,
+    trim: true,
+    requierd: [true, 'Task must has a name'],
+    minLength: [8, 'Task name must be at least 8 charachters'],
+    maxLength: [40, 'Task name is at most 40 charachters'],
   },
   project: {
     type: mongoose.Types.ObjectId,
@@ -18,6 +22,7 @@ const taskSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    trim: true,
   },
   startDate: {
     type: Date,

@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const activitySchema = new mongoose.Schema({
   name: {
     type: String,
+    trim: true,
+    requierd: [true, 'Activity must has name'],
+    minLength: [8, 'Activity name must be at least 8 charachters'],
+    maxLength: [40, 'Activity name is at most 40 charachters'],
   },
   task: {
     type: mongoose.Types.ObjectId,
@@ -14,6 +18,7 @@ const activitySchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    trim: true,
   },
   deadline: {
     type: Date,
