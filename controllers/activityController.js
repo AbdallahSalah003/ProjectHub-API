@@ -11,8 +11,8 @@ exports.setActivity = catchAsyncError(async (req, res, next) => {
       new AppError('Activity contributer in not registered on system', 404),
     );
   }
-  req.body.taskID = req.params.taskId;
-  req.body.contributerID = contributer._id;
+  req.body.task = req.params.taskId;
+  req.body.contributer = contributer._id;
   next();
 });
 exports.AddActivity = factory.createOne(Activity);

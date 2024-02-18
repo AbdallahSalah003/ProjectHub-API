@@ -4,11 +4,11 @@ const activitySchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  taskID: {
+  task: {
     type: mongoose.Types.ObjectId,
     ref: 'Task',
   },
-  contributerID: {
+  contributer: {
     type: mongoose.Types.ObjectId,
     ref: 'User',
   },
@@ -26,7 +26,16 @@ const activitySchema = new mongoose.Schema({
     default: 'progress',
   },
 });
-
+activitySchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'contributer',
+    select: '_id first_name email',
+  }).populate({
+    path: 'task',
+    select: '_id name',
+  });
+  next();
+});
 const Activity = mongoose.model('Activity', activitySchema);
 
 module.exports = Activity;
