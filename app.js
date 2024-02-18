@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const hpp = require('hpp');
 const userRouter = require('./routes/userRoutes');
 const projecRouter = require('./routes/projectRoutes');
 const taskRouter = require('./routes/taskRoutes');
@@ -28,6 +29,19 @@ app.use(express.json({ limit: '10kb' }));
 
 app.use(mongoSanitize());
 app.use(xss());
+
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'price',
+      'difficulty',
+      'ratingAverage',
+      'ratingQuantity',
+      'maxGroupSize',
+    ],
+  }),
+);
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/projects', projecRouter);
