@@ -7,8 +7,8 @@ exports.getAll = (Model) =>
     // this is for getting the nested get
     let filterObj = {};
     if (req.params.taskId) filterObj = { task: req.params.taskId };
-    if (req.params.projectId)
-      filterObj = { ...filterObj, project: req.params.projectId };
+    if (req.params.projectID)
+      filterObj = { ...filterObj, project: req.params.projectID };
 
     if (req.projs) filterObj = { ...filterObj, ownerID: req.user.id };
 
@@ -23,7 +23,9 @@ exports.getAll = (Model) =>
     res.status(200).json({
       status: 'success',
       results: docs.length,
-      data: { docs },
+      data: {
+        data: docs,
+      },
     });
   });
 
