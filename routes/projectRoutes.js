@@ -11,7 +11,7 @@ router.use('/:projectID/tasks', taskRouter);
 
 router
   .route('/')
-  .get(projectController.getAllProjects)
+  .get(projectController.getProjectsFlag, projectController.getAllProjects)
   .post(projectController.setOwnerId, projectController.createProject);
 
 router

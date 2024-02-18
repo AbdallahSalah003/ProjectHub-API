@@ -6,6 +6,10 @@ exports.setOwnerId = (req, res, next) => {
   req.body.ownerID = req.user.id;
   next();
 };
+exports.getProjectsFlag = (req, res, next) => {
+  req.projs = true;
+  next();
+};
 exports.createProject = factory.createOne(Project);
 
 exports.getAllProjects = factory.getAll(Project);

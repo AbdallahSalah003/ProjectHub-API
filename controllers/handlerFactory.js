@@ -6,9 +6,11 @@ exports.getAll = (Model) =>
   catchAsyncError(async (req, res, next) => {
     // this is for getting the nested get
     let filterObj = {};
-    if (req.params.taskId) filterObj = { taskID: req.params.taskId };
+    if (req.params.taskId) filterObj = { task: req.params.taskId };
     if (req.params.projectId)
-      filterObj = { ...filterObj, projectID: req.params.projectId };
+      filterObj = { ...filterObj, project: req.params.projectId };
+
+    if (req.projs) filterObj = { ...filterObj, ownerID: req.user.id };
 
     const features = new APIFeatures(Model.find(filterObj), req.query)
       .filter()
